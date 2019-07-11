@@ -12,7 +12,7 @@ public class MyInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //进行逻辑判断，如果ok就返回true，不行就返回false，返回false就不会处理该请求
         System.out.println("=========MyInterceptor=========");
-        return false;
+        return true;
     }
 
     @Override
