@@ -4,6 +4,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+/***
+ * 自定义springboot启动初始化
+ */
 @Component
 @Order(1)
 public class Runner implements CommandLineRunner {
