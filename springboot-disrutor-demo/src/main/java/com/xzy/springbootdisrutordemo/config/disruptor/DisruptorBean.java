@@ -1,9 +1,6 @@
 package com.xzy.springbootdisrutordemo.config.disruptor;
 
-import com.lmax.disruptor.EventFactory;
-import com.lmax.disruptor.ExceptionHandler;
-import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.YieldingWaitStrategy;
+import com.lmax.disruptor.*;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 
@@ -12,7 +9,7 @@ import java.util.concurrent.Executors;
 public class DisruptorBean {
     private Disruptor<MessageEvent> disruptor;
     private RingBuffer<MessageEvent> ringBuffer;
-
+    private static final int threadPoolSize = 4;
     public void init(){
         System.out.println("============初始化============");
         //ProducerType.MULTI 支持多事件发布
@@ -21,7 +18,7 @@ public class DisruptorBean {
             public MessageEvent newInstance() {
                 return new MessageEvent();
             }
-        }, 1024 * 2 , Executors.newFixedThreadPool(4) , ProducerType.MULTI ,new YieldingWaitStrategy());
+        }, 1024 * 2 , Executors.newFixedThreadPool(threadPoolSize) , ProducerType.MULTI ,new YieldingWaitStrategy());
         ringBuffer = disruptor.getRingBuffer();
         //定义异常处理
         disruptor.handleExceptionsWith(new ExceptionHandler<MessageEvent>() {
@@ -40,15 +37,36 @@ public class DisruptorBean {
                 //TODO 待处理
             }
         });
-
-
-
+        WorkHandler<MessageEvent> workHandler = new WorkHandler<MessageEvent>() {
+            @Override
+            public void onEvent(MessageEvent messageEvent) throws Exception {
+                System.out.println("=============message=============");
+            }
+        };
+        WorkHandler[] workHandlers = new WorkHandler[threadPoolSize];
+        for(int i = 0 ; i < threadPoolSize ; i++){
+            workHandlers[i] = workHandler;
+        }
+        disruptor.handleEventsWithWorkerPool(workHandlers);
+        //启动
+        disruptor.start();
         System.out.println("============初始化结束============");
     }
 
+    /***
+     * 容器销毁事件
+     */
     public void destroy(){
         System.out.println("============销毁============");
     }
+
+
+
+
+
+
+
+
 
     public Disruptor<MessageEvent> getDisruptor() {
         return disruptor;
