@@ -40,7 +40,7 @@ public class DisruptorBean {
         WorkHandler<MessageEvent> workHandler = new WorkHandler<MessageEvent>() {
             @Override
             public void onEvent(MessageEvent messageEvent) throws Exception {
-                System.out.println("=============message=============");
+                System.out.println("接收到消息并进行处理 , message =" + messageEvent.getMessage());
             }
         };
         WorkHandler[] workHandlers = new WorkHandler[threadPoolSize];
@@ -50,6 +50,8 @@ public class DisruptorBean {
         disruptor.handleEventsWithWorkerPool(workHandlers);
         //启动
         disruptor.start();
+
+
         System.out.println("============初始化结束============");
     }
 
@@ -57,7 +59,10 @@ public class DisruptorBean {
      * 容器销毁事件
      */
     public void destroy(){
-        System.out.println("============销毁============");
+        System.out.println("============销毁事件注销disruptor============");
+        if(disruptor != null){
+            disruptor.shutdown();
+        }
     }
 
 
