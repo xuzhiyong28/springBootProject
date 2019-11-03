@@ -10,7 +10,8 @@ public class DisruptorBean {
     private Disruptor<MessageEvent> disruptor;
     private RingBuffer<MessageEvent> ringBuffer;
     private static final int threadPoolSize = 4;
-    public void init(){
+
+    public void init() {
         System.out.println("============初始化============");
         //ProducerType.MULTI 支持多事件发布
         disruptor = new Disruptor<MessageEvent>(new EventFactory<MessageEvent>() {
@@ -18,7 +19,7 @@ public class DisruptorBean {
             public MessageEvent newInstance() {
                 return new MessageEvent();
             }
-        }, 1024 * 2 , Executors.newFixedThreadPool(threadPoolSize) , ProducerType.MULTI ,new YieldingWaitStrategy());
+        }, 1024 * 2, Executors.newFixedThreadPool(threadPoolSize), ProducerType.MULTI, new YieldingWaitStrategy());
         ringBuffer = disruptor.getRingBuffer();
         //定义异常处理
         disruptor.handleExceptionsWith(new ExceptionHandler<MessageEvent>() {
@@ -40,11 +41,11 @@ public class DisruptorBean {
         WorkHandler<MessageEvent> workHandler = new WorkHandler<MessageEvent>() {
             @Override
             public void onEvent(MessageEvent messageEvent) throws Exception {
-                System.out.println("接收到消息并进行处理 , message =" + messageEvent.getMessage());
+                System.out.println("当前线程：" + Thread.currentThread().getId() + ",接收到消息并进行处理 , message =" + messageEvent.getMessage());
             }
         };
         WorkHandler[] workHandlers = new WorkHandler[threadPoolSize];
-        for(int i = 0 ; i < threadPoolSize ; i++){
+        for (int i = 0; i < threadPoolSize; i++) {
             workHandlers[i] = workHandler;
         }
         disruptor.handleEventsWithWorkerPool(workHandlers);
@@ -58,19 +59,12 @@ public class DisruptorBean {
     /***
      * 容器销毁事件
      */
-    public void destroy(){
+    public void destroy() {
         System.out.println("============销毁事件注销disruptor============");
-        if(disruptor != null){
+        if (disruptor != null) {
             disruptor.shutdown();
         }
     }
-
-
-
-
-
-
-
 
 
     public Disruptor<MessageEvent> getDisruptor() {
