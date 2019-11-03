@@ -14,17 +14,19 @@ import java.util.concurrent.Executors;
 public class Constant {
     public static final ExecutorService publishMessageExec = Executors.newFixedThreadPool(4);
 
-    public static String bootstrapServers;
+    public  String bootstrapServers;
 
-    public static String keyDeserializer;
+    public  String keyDeserializer;
 
-    public static  String valueDeserializer;
+    public  String valueDeserializer;
 
-    public static  String groupId;
+    public  String groupId;
 
-    public static  String autoCommit;
+    public  String autoCommit;
 
-    public static String maxPollRecords;
+    public  String maxPollRecords;
+
+    public  String beatPartitionNumber;
 
     @Value("${beatlog.kafka.bootstrap.servers}")
     public void setBootstrapServers(String bootstrapServers) {
@@ -54,5 +56,38 @@ public class Constant {
     @Value("${beatlog.max.poll.records}")
     public void setMaxPollRecords(String maxPollRecords) {
         this.maxPollRecords = maxPollRecords;
+    }
+
+    @Value("${beatlog.kafka.partitionNumber}")
+    public void setBeatPartitionNumber(String beatPartitionNumber) {
+        this.beatPartitionNumber = beatPartitionNumber;
+    }
+
+    public String getBootstrapServers() {
+        return bootstrapServers;
+    }
+
+    public String getKeyDeserializer() {
+        return keyDeserializer;
+    }
+
+    public String getValueDeserializer() {
+        return valueDeserializer;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public String getAutoCommit() {
+        return autoCommit;
+    }
+
+    public String getMaxPollRecords() {
+        return maxPollRecords;
+    }
+
+    public String getBeatPartitionNumber() {
+        return beatPartitionNumber;
     }
 }

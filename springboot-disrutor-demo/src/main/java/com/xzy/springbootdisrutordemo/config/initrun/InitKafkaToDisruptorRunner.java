@@ -16,11 +16,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class InitKafkaToDisruptorRunner implements CommandLineRunner {
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args){
         DisruptorBean disruptorBean = SpringContextUtil.getBean(DisruptorBean.class);
+        Constant constant = SpringContextUtil.getBean(Constant.class);
         //启动消费线程，从kafka上获取数据
-        for(int i = 0 ; i < 4 ; i++){
-            Constant.publishMessageExec.submit(new MessageEventToDisruptorThread(disruptorBean.getRingBuffer()));
+        //一般比较常用得方法是一个线程处理一个主题的分区 ，所以这里需要获取对应的主题的分区数然后确定线程大小
+        //但这种方式无法应对新增分区的情况，如果有新分区需要做其他处理
+        for(int i = 0 ; i < Integer.valueOf(constant.beatPartitionNumber) ; i++){
+            Constant.publishMessageExec.submit(new MessageEventToDisruptorThread(disruptorBean.getRingBuffer(), i));
         }
     }
 }
