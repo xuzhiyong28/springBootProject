@@ -28,6 +28,8 @@ public class Constant {
 
     public  String beatPartitionNumber;
 
+    public String beatlogSwith;
+
     @Value("${beatlog.kafka.bootstrap.servers}")
     public void setBootstrapServers(String bootstrapServers) {
         this.bootstrapServers = bootstrapServers;
@@ -61,6 +63,15 @@ public class Constant {
     @Value("${beatlog.kafka.partitionNumber}")
     public void setBeatPartitionNumber(String beatPartitionNumber) {
         this.beatPartitionNumber = beatPartitionNumber;
+    }
+
+    public String getBeatlogSwith() {
+        return beatlogSwith;
+    }
+
+    @Value("${beatlog.kafka.switch}")
+    public void setBeatlogSwith(String beatlogSwith) {
+        this.beatlogSwith = beatlogSwith;
     }
 
     public String getBootstrapServers() {

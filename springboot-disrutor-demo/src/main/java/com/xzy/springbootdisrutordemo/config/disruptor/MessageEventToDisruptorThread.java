@@ -36,7 +36,7 @@ public class MessageEventToDisruptorThread implements Runnable {
     private Map<TopicPartition, OffsetAndMetadata> currentOffsets;
 
     static {
-        TOPIC = "beatlog";
+        TOPIC = "httplog";
     }
 
     public MessageEventToDisruptorThread(RingBuffer<MessageEvent> ringBuffer, int partitionIndex) {
@@ -66,8 +66,8 @@ public class MessageEventToDisruptorThread implements Runnable {
             while (true) {
                 ConsumerRecords<String, String> records = kafkaConsumer.poll(1000);
                 for (ConsumerRecord<String, String> record : records) {
-                    logger.info(" ThreadId = %s,partition = %s,offset = %d, key = %s, timestamp = %d , value = %s%n",
-                            Thread.currentThread().getId(), record.partition(), record.offset(), record.key(), record.timestamp(), record.value());
+                    /*logger.info(" ThreadId = %s,partition = %s,offset = %d, key = %s, timestamp = %d , value = %s%n",
+                            Thread.currentThread().getId(), record.partition(), record.offset(), record.key(), record.timestamp(), record.value());*/
                     EventTranslatorOneArg<MessageEvent, ConsumerRecord<String, String>> translator = new MessageEventTranslator();
                     //进入队列处理
                     ringBuffer.publishEvent(translator, record);

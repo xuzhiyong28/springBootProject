@@ -5,6 +5,7 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class DisruptorBean {
     private Disruptor<MessageEvent> disruptor;
@@ -41,6 +42,7 @@ public class DisruptorBean {
         WorkHandler<MessageEvent> workHandler = new WorkHandler<MessageEvent>() {
             @Override
             public void onEvent(MessageEvent messageEvent) throws Exception {
+                TimeUnit.MICROSECONDS.sleep(200);
                 System.out.println("当前线程：" + Thread.currentThread().getId() + ",接收到消息并进行处理 , message =" + messageEvent.getMessage());
             }
         };

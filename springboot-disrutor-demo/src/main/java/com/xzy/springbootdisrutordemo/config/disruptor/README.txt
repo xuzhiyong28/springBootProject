@@ -1,0 +1,2 @@
+目标:
+模拟springBoot启动后从kafka获取数据并交给disruptor进行处理
