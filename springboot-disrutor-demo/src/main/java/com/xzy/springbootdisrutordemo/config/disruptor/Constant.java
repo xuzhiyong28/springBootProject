@@ -1,8 +1,11 @@
 package com.xzy.springbootdisrutordemo.config.disruptor;
 
+import com.google.common.collect.Lists;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,6 +16,11 @@ import java.util.concurrent.Executors;
 @Component
 public class Constant {
     public static final ExecutorService publishMessageExec = Executors.newFixedThreadPool(4);
+    //用来记录kafka客户端实例，当程序退出时优雅调用退出
+    public static final List<KafkaConsumer> kafkaConsumerLists = Lists.newArrayList();
+    static {
+
+    }
 
     public  String bootstrapServers;
 

@@ -43,13 +43,14 @@ public class MessageEventToDisruptorThread implements Runnable {
         Constant constant = SpringContextUtil.getBean(Constant.class);
         Properties properties = new Properties();
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, constant.bootstrapServers); //kafka集群地址
-        properties.put("group.id", constant.groupId + System.currentTimeMillis());
+        properties.put("group.id", constant.groupId);
         properties.put("enable.auto.commit", constant.autoCommit); //显示偏移量自动提交
         properties.put("key.deserializer", constant.keyDeserializer);
         properties.put("value.deserializer", constant.valueDeserializer);
         properties.put("max.poll.records", constant.maxPollRecords); //每次拉取的最大条数
         properties.put("auto.offset.reset", "earliest");
         this.kafkaConsumer = new KafkaConsumer<>(properties);
+        Constant.kafkaConsumerLists.add(kafkaConsumer);
         this.ringBuffer = ringBuffer;
         this.partitionIndex = partitionIndex;
         this.currentOffsets = Maps.newHashMap();
