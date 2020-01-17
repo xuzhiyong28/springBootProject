@@ -5,6 +5,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 /**
  * @author xuzhiyong
  * @createDate 2019-11-02-10:02
@@ -30,6 +32,11 @@ public class SpringContextUtil implements ApplicationContextAware {
     @SuppressWarnings("unchecked")
     public static <T> T getBean(Class<?> clz) throws BeansException {
         return (T) applicationContext.getBean(clz);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Map<String, T> getBeansOfType(Class<T> clz){
+        return applicationContext.getBeansOfType(clz);
     }
 
 }
