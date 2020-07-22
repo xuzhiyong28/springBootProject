@@ -71,7 +71,7 @@ public class RateLimterHandler {
         if (isLimiterIp && request != null) {
             if (request != null) {
                 String ip = IpUtil.getIpAddr(request);
-                limitKey = ":" + ip;
+                limitKey = limitKey + ":" + ip;
             }
         }
         //限流阀值
